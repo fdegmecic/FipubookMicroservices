@@ -4,10 +4,9 @@ import {json} from 'body-parser';
 import cookieSession from "cookie-session";
 
 import {errorHandler, NotFoundError, currentUser} from '@fdfipubook/common';
-import {createPostRouter} from "./routes/createPost";
-import {updatePostRouter} from "./routes/updatePost";
-import {getPostRouter} from "./routes/getPost";
-import {getPostsRouter} from "./routes/getPosts";
+import {createCommentRouter} from "./routes/createComment";
+import {updateCommentRouter} from "./routes/updateComment";
+import {getCommentsRouter} from "./routes/getComments";
 
 const app = express();
 app.set('trust proxy', true);
@@ -21,10 +20,9 @@ app.use(
 
 app.use(currentUser);
 
-app.use(createPostRouter);
-app.use(updatePostRouter);
-app.use(getPostRouter);
-app.use(getPostsRouter);
+app.use(createCommentRouter);
+app.use(updateCommentRouter);
+app.use(getCommentsRouter);
 
 app.all('*', async (req, res) => {
     throw new NotFoundError();

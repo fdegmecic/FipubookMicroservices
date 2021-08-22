@@ -7,16 +7,9 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
-    - host: ticketing.dev
+    - host: fipubook.dev
       http:
         paths:
-          - path: /api/payments/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: payments-srv
-                port:
-                  number: 3000
           - path: /api/users/?(.*)
             pathType: Prefix
             backend:
@@ -24,18 +17,18 @@ spec:
                 name: auth-srv
                 port:
                   number: 3000
-          - path: /api/tickets/?(.*)
+          - path: /api/posts/?(.*)
             pathType: Prefix
             backend:
               service:
-                name: tickets-srv
+                name: posts-srv
                 port:
                   number: 3000
-          - path: /api/orders/?(.*)
+          - path: /api/comments/?(.*)
             pathType: Prefix
             backend:
               service:
-                name: orders-srv
+                name: comments-srv
                 port:
                   number: 3000
           - path: /?(.*)

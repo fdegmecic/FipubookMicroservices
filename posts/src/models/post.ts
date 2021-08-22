@@ -1,0 +1,47 @@
+import mongoose from "mongoose";
+
+interface PostAttributes {
+    postText: string;
+    userId: string;
+    created: Date,
+}
+
+interface PostDocument extends mongoose.Document {
+    postText: string;
+    userId: string;
+    created: Date,
+}
+
+interface PostModel extends mongoose.Model<PostDocument> {
+    build(attributes: PostAttributes): PostDocument;
+}
+
+const postSchema = new mongoose.Schema({
+    postText: {
+        type: String,
+        required: true
+    },
+    userId: {
+        type: String,
+        required: true
+    },
+    created: {
+        type: mongoose.Schema.Types.Date
+    },
+}, {
+    toJSON: {
+        transform(doc, ret) {
+            ret.id = ret._id;
+            delete ret._id;
+        }
+    }
+});
+
+postSchema.statics.build=(attributes: PostAttributes) => {
+    return new Post(attributes);
+}
+
+// @ts-ignore
+const Post = mongoose.model<PostDocument, PostModel>('Post', postSchema);
+
+export {Post}
