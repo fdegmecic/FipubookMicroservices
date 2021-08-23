@@ -10,8 +10,10 @@ Mentor: doc. dr. sc.  Nikola Tanković
 [Sveučilište Jurja Dobrile u Puli](https://www.unipu.hr/), [Fakultet informatike](https://fipu.unipu.hr/fipu)
 
 # Architecture:
-Technologies used: React(Next.js), Node.js(Express), Kubernetes, Skaffold, Docker, Google Kubernetes Engine, Neo4j Social Graph(to be implemented), MongoDb, NATS streaming(events)
+Technologies used: React(Next.js), Node.js(Express), Kubernetes, Skaffold, Docker, Google Kubernetes Engine, MongoDb, NATS streaming(events)
 
 Red -> to be implemented
 
-![alt text](https://user-images.githubusercontent.com/42947589/130471087-e93bdaa4-e506-4a63-b7d3-9dcc15c0e030.png)
+![Fipubook-Architecture (1)](https://user-images.githubusercontent.com/42947589/130504050-6a7420f6-606d-4141-af16-cf10f4507a46.png)
+
+
