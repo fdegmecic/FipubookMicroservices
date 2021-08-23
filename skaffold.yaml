@@ -42,3 +42,27 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: gcr.io/fipubook-dev/search
+      context: search
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: gcr.io/fipubook-dev/timeline
+      context: timeline
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: gcr.io/fipubook-dev/followers
+      context: followers
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

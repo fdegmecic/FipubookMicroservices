@@ -5,6 +5,8 @@ import {currentUser, validateRequest, BadRequestError} from '@fdfipubook/common'
 
 import {User} from "../models/user";
 import {Password} from "../utils/password";
+import {UserRegisteredPublisher} from "../events/publishers/user-registered-publisher";
+import {natsWrapper} from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -15,9 +17,13 @@ router.post('/api/users/signup', [
     body('password')
         .trim()
         .isLength({min: 4, max: 20})
-        .withMessage('Password must be between 4 and 20 characters long')
+        .withMessage('Password must be between 4 and 20 characters long'),
+    body('name')
+        .not()
+        .isEmpty()
+        .withMessage('Name is required'),
 ], validateRequest, async (req: Request, res: Response) => {
-    const {email, password} = req.body;
+    const {email, password, name} = req.body;
 
     const existingUser = await User.findOne({email});
 
@@ -25,8 +31,13 @@ router.post('/api/users/signup', [
         throw new BadRequestError('Email in use');
     }
 
-    const user = User.build({email, password});
+    const user = User.build({email, password, name});
     await user.save();
+
+    new UserRegisteredPublisher(natsWrapper.client).publish({
+        id: user.id,
+        name: user.name,
+    })
 
     const userJwt = jwt.sign({
         id: user.id,

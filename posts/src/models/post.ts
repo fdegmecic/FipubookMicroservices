@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {updateIfCurrentPlugin} from "mongoose-update-if-current";
 
 interface PostAttributes {
     postText: string;
@@ -10,6 +11,7 @@ interface PostDocument extends mongoose.Document {
     postText: string;
     userId: string;
     created: Date,
+    version: number,
 }
 
 interface PostModel extends mongoose.Model<PostDocument> {
@@ -36,6 +38,10 @@ const postSchema = new mongoose.Schema({
         }
     }
 });
+
+postSchema.set('versionKey', 'version')
+postSchema.plugin(updateIfCurrentPlugin);
+
 
 postSchema.statics.build=(attributes: PostAttributes) => {
     return new Post(attributes);

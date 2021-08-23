@@ -4,19 +4,21 @@ import {Password} from "../utils/password";
 interface UserAttributes {
     email: string;
     password: string;
+    name: string;
 }
 
-interface UserDoc extends mongoose.Document {
+interface UserDocument extends mongoose.Document {
     email: string;
     password: string;
+    name: string;
 }
 
-interface UserModel extends mongoose.Model<UserDoc> {
-    build(attributes: UserAttributes): UserDoc;
+interface UserModel extends mongoose.Model<UserDocument> {
+    build(attributes: UserAttributes): UserDocument;
 }
 
 
-const userSchema = new mongoose.Schema<UserDoc>({
+const userSchema = new mongoose.Schema<UserDocument>({
     email: {
         type: String,
         required: true,
@@ -25,6 +27,10 @@ const userSchema = new mongoose.Schema<UserDoc>({
         type: String,
         required: true,
     },
+    name: {
+        type: String,
+        required: true,
+    }
 }, {
     toJSON: {
         transform(doc, ret) {
@@ -48,6 +54,6 @@ userSchema.statics.build = (attributes: UserAttributes) => {
     return new User(attributes);
 }
 
-const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
+const User = mongoose.model<UserDocument, UserModel>('User', userSchema);
 
 export {User}
