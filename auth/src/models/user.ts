@@ -5,12 +5,14 @@ interface UserAttributes {
     email: string;
     password: string;
     name: string;
+    avatar: string;
 }
 
 interface UserDocument extends mongoose.Document {
     email: string;
     password: string;
     name: string;
+    avatar: string;
 }
 
 interface UserModel extends mongoose.Model<UserDocument> {
@@ -28,6 +30,10 @@ const userSchema = new mongoose.Schema<UserDocument>({
         required: true,
     },
     name: {
+        type: String,
+        required: true,
+    },
+    avatar: {
         type: String,
         required: true,
     }

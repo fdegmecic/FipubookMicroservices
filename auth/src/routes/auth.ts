@@ -7,10 +7,12 @@ import {User} from "../models/user";
 import {Password} from "../utils/password";
 import {UserRegisteredPublisher} from "../events/publishers/user-registered-publisher";
 import {natsWrapper} from "../nats-wrapper";
+import {cloudinary} from "../utils/cloudinary";
 
+const upload = require("../utils/multer");
 const router = express.Router();
 
-router.post('/api/users/signup', [
+router.post('/api/users/signup', upload.single('image'), [
     body('email')
         .isEmail()
         .withMessage('Email must be valid'),
@@ -30,8 +32,10 @@ router.post('/api/users/signup', [
     if (existingUser) {
         throw new BadRequestError('Email in use');
     }
+    const uploadedImage = await cloudinary.uploader.upload(req.file?.path);
+    const avatar = uploadedImage.url;
 
-    const user = User.build({email, password, name});
+    const user = User.build({email, password, name, avatar});
     await user.save();
 
     new UserRegisteredPublisher(natsWrapper.client).publish({
@@ -87,11 +91,11 @@ router.post('/api/users/signin', [
         res.status(200).send(existingUser);
     });
 
-router.get('/api/users/currentuser', currentUser, (req, res) => {
+router.get('/api/users/currentuser', currentUser, (req: Request, res: Response) => {
     res.send({currentUser: req.currentUser || null});
 });
 
-router.post('/api/users/signout', (req, res) => {
+router.post('/api/users/signout', (req: Request, res: Response) => {
     req.session = null;
 
     res.send({});

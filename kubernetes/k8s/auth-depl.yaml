@@ -31,6 +31,12 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+            - name: CLOUDINARY_CLOUD_NAME
+              value: 'dwsbhnc1g'
+            - name: CLOUDINARY_API_KEY
+              value: '296659649695641'
+            - name: CLOUDINARY_API_SECRET
+              value: 'WFhRk5otDsSrffimtquL4zM8-UM'
 ---
 apiVersion: v1
 kind: Service
