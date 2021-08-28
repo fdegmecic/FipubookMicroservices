@@ -1,7 +1,7 @@
 import express, {Request, Response} from "express";
 import {body} from 'express-validator';
 import jwt from 'jsonwebtoken';
-import {currentUser, validateRequest, BadRequestError} from '@fdfipubook/common'
+import {currentUser, validateRequest, BadRequestError, NotFoundError} from '@fdfipubook/common'
 
 import {User} from "../models/user";
 import {Password} from "../utils/password";
@@ -41,11 +41,14 @@ router.post('/api/users/signup', upload.single('image'), [
     new UserRegisteredPublisher(natsWrapper.client).publish({
         id: user.id,
         name: user.name,
+        avatar: user.avatar,
     })
 
     const userJwt = jwt.sign({
         id: user.id,
-        email: user.email
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
     }, process.env.JWT_KEY!);
 
     req.session = {
@@ -81,7 +84,9 @@ router.post('/api/users/signin', [
 
         const userJwt = jwt.sign({
             id: existingUser.id,
-            email: existingUser.email
+            email: existingUser.email,
+            name: existingUser.name,
+            avatar: existingUser.avatar,
         }, process.env.JWT_KEY!);
 
         req.session = {
@@ -101,4 +106,13 @@ router.post('/api/users/signout', (req: Request, res: Response) => {
     res.send({});
 });
 
+router.get('/api/users/:id', async (req: Request, res: Response) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        throw new NotFoundError();
+    }
+
+    res.status(200).send(user);
+});
 export {router as authRouter};

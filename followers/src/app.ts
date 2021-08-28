@@ -6,6 +6,7 @@ import cookieSession from "cookie-session";
 import {errorHandler, NotFoundError, currentUser} from '@fdfipubook/common';
 import {getUserFollowersRouter} from "./routes/getUserFollowers";
 import {followUserRouter} from "./routes/followUser";
+import {getUserFollowingRouter} from "./routes/getUserFollowing";
 
 const app = express();
 app.set('trust proxy', true);
@@ -21,6 +22,7 @@ app.use(currentUser);
 
 app.use(followUserRouter);
 app.use(getUserFollowersRouter);
+app.use(getUserFollowingRouter);
 
 app.all('*', async (req, res) => {
     throw new NotFoundError();

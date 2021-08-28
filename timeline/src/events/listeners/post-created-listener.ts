@@ -8,9 +8,9 @@ export class PostCreatedListener extends Listener<PostCreatedEvent> {
     queueGroupName = queueGroupName;
 
     async onMessage(data: PostCreatedEvent["data"], msg: Message) {
-        const {id, postText, userId, created, version} = data;
+        const {id, postText, userId, userName, userAvatar, created, version} = data;
         const post = Post.build({
-            id, postText, userId, created, version
+            id, postText, userId, userName, userAvatar, created, version
         });
         await post.save();
 

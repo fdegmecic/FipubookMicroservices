@@ -3,13 +3,19 @@ import {updateIfCurrentPlugin} from "mongoose-update-if-current";
 
 interface PostAttributes {
     postText: string;
+    postUrl?: string;
     userId: string;
+    userName: string;
+    userAvatar: string;
     created: Date,
 }
 
 interface PostDocument extends mongoose.Document {
     postText: string;
+    postUrl?: string;
     userId: string;
+    userName: string;
+    userAvatar: string;
     created: Date,
     version: number,
 }
@@ -23,9 +29,21 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    postUrl: {
+        type: String,
+        required: false,
+    },
     userId: {
         type: String,
         required: true
+    },
+    userName: {
+        type: String,
+        required: true
+    },
+    userAvatar: {
+        type: String,
+        required: true,
     },
     created: {
         type: mongoose.Schema.Types.Date
@@ -42,8 +60,7 @@ const postSchema = new mongoose.Schema({
 postSchema.set('versionKey', 'version')
 postSchema.plugin(updateIfCurrentPlugin);
 
-
-postSchema.statics.build=(attributes: PostAttributes) => {
+postSchema.statics.build = (attributes: PostAttributes) => {
     return new Post(attributes);
 }
 

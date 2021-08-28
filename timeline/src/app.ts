@@ -17,8 +17,6 @@ app.use(
 
 app.use(currentUser);
 
-
-
 app.all('*', async (req, res) => {
     throw new NotFoundError();
 })

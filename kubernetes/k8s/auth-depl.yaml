@@ -32,11 +32,20 @@ spec:
                   name: jwt-secret
                   key: JWT_KEY
             - name: CLOUDINARY_CLOUD_NAME
-              value: 'dwsbhnc1g'
+              valueFrom:
+                secretKeyRef:
+                  name: cloudinary-cloud-name
+                  key: CLOUDINARY_CLOUD_NAME
             - name: CLOUDINARY_API_KEY
-              value: '296659649695641'
+              valueFrom:
+                secretKeyRef:
+                  name: cloudinary-api-key
+                  key: CLOUDINARY_API_KEY
             - name: CLOUDINARY_API_SECRET
-              value: 'WFhRk5otDsSrffimtquL4zM8-UM'
+              valueFrom:
+                secretKeyRef:
+                  name: cloudinary-api-secret
+                  key: CLOUDINARY_API_SECRET
 ---
 apiVersion: v1
 kind: Service

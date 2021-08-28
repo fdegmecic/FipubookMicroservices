@@ -5,6 +5,8 @@ interface PostAttributes {
     id: string;
     postText: string;
     userId: string;
+    userName:string;
+    userAvatar:string;
     created:Date;
     version:number;
 }
@@ -12,6 +14,8 @@ interface PostAttributes {
 export interface PostDocument extends mongoose.Document {
     postText: string;
     userId: string;
+    userName:string;
+    userAvatar:string;
     created:Date;
     version:number;
 }
@@ -26,6 +30,14 @@ const postSchema = new mongoose.Schema({
         required: true
     },
     userId: {
+        type: String,
+        required: true
+    },
+    userName: {
+        type: String,
+        required: true
+    },
+    userAvatar: {
         type: String,
         required: true
     },
@@ -49,6 +61,8 @@ postSchema.statics.build=(attributes: PostAttributes) => {
         _id:attributes.id,
         postText:attributes.postText,
         userId:attributes.userId,
+        userName:attributes.userName,
+        userAvatar:attributes.userAvatar,
         version:attributes.version,
     });
 }

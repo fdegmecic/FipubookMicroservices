@@ -7,17 +7,17 @@ const router = express.Router();
 
 router.post('/api/followers/:userId', requireAuth, async (req: Request, res: Response) => {
     const follower = await User.findById(req.currentUser!.id);
-    const followee = await User.findById(req.params.userId);
+    const following = await User.findById(req.params.userId);
 
-    if(!followee || ! follower) {
+    if(!following || ! follower) {
         throw new NotFoundError();
     }
 
     const follow = Follower.build({
-        //onaj koji biva praćen
-        followeeId: followee.id,
-        //onaj koji prati tu osobu
-        followerId: follower.id
+        followerId: follower.id,
+        followingId: following.id,
+        followingName: following.name,
+        followingAvatar: following.avatar,
     })
 
     await follow.save();

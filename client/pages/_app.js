@@ -1,11 +1,20 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import buildClient from "../api/build-client";
-import Header from "../components/header";
+import '../styles/globals.css'
+import SignIn from "./auth/signin";
+import Header from "../components/Header";
 
 const AppComponent = ({Component, pageProps, currentUser}) => {
-    return <div>
+    if(!currentUser) {
+        return <SignIn />
+    }
+
+    return <div className="h-screen bg-gray-100 overflow-hidden">
         <Header currentUser={currentUser}/>
-        <Component {...pageProps} />
+        {currentUser &&
+        <>
+            <Component currentUser={currentUser} {...pageProps}/>
+        </>}
     </div>
 };
 
@@ -15,7 +24,7 @@ AppComponent.getInitialProps = async appContext => {
 
     let pageProps;
     if (appContext.Component.getInitialProps) {
-        pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+        pageProps = await appContext.Component.getInitialProps(appContext.ctx, client, data.currentUser);
     }
 
     return {

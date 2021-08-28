@@ -2,8 +2,9 @@ import {useState} from 'react';
 import useRequest from "../../hooks/use-request";
 import Router from 'next/router';
 const FormData = require('form-data')
+import { Col, Container, Row} from "react-bootstrap";
 
-const Signup = () => {
+const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -30,46 +31,54 @@ const Signup = () => {
     return (
         <div className="container">
             <form onSubmit={onSubmit}>
-                <h1>Sign Up</h1>
-                <div className="form-group">
-                    <label>Email Address</label>
-                    <input
-                        className="form-control"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Password</label>
-                    <input
-                        className="form-control"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Name</label>
-                    <input
-                        className="form-control"
-                        type="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Upload avatar</label>
-                    <input
-                        className="form-control"
-                        type="file"
-                        onChange={(e) => setAvatar(e.target.files[0])}
-                    />
-                </div>
-                {errors}
-                <button className="btn btn-primary">Sign Up</button>
+                <Container>
+                    <h1 align="center" >Sign up</h1>
+                    <Row className="mt-5">
+                        <Col lg={5} md={6} sm={12} className="p-5 m-auto shadow-sm rounded-lg">
+                                <div className="form-group">
+                                    <label>Email Address</label>
+                                    <input
+                                        className="form-control"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Password</label>
+                                    <input
+                                        className="form-control"
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Name</label>
+                                    <input
+                                        className="form-control"
+                                        type="name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Upload avatar</label>
+                                    <input
+                                        className="form-control"
+                                        type="file"
+                                        onChange={(e) => setAvatar(e.target.files[0])}
+                                    />
+                                </div>
+                                {errors}
+                                <div className="col text-center pt-3">
+                                <button className="btn btn-primary">Sign Up</button>
+                                </div>
+                        </Col>
+                    </Row>
+                </Container>
             </form>
         </div>
     );
 }
 
-export default Signup;
+export default SignUp;

@@ -3,10 +3,12 @@ import mongoose from 'mongoose';
 interface UserAttributes {
     id:string;
     name: string;
+    avatar:string;
 }
 
 interface UserDocument extends mongoose.Document {
     name: string;
+    avatar:string;
 }
 
 interface UserModel extends mongoose.Model<UserDocument> {
