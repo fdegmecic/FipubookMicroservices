@@ -1,8 +1,6 @@
 import Image from "next/image";
 
-import {
-    SearchIcon,
-} from "@heroicons/react/outline";
+import {SearchIcon} from "@heroicons/react/outline";
 import Link from 'next/link';
 import Router from "next/router";
 
@@ -11,14 +9,21 @@ function Header({currentUser}) {
         Router.push(`/user/${currentUser.id}`);
     }
 
+    const goToHomePage = () => {
+        Router.push('/')
+    }
+
     return (
         <div className="sticky top-0 z-50 bg-white flex items-center p-2 lg:px-5 shadow-md">
             <div className="flex items-center">
-                <Image src="https://res.cloudinary.com/dwsbhnc1g/image/upload/v1630184633/ci71hrda4ntkbvugi8xe.png"
-                       width={40}
-                       height={40}
-                       layout="fixed"/>
-
+                <Image
+                    className="cursor-pointer"
+                    onClick={goToHomePage}
+                    src="https://res.cloudinary.com/dwsbhnc1g/image/upload/v1630184633/ci71hrda4ntkbvugi8xe.png"
+                    width={40}
+                    height={40}
+                    layout="fixed"
+                />
                 {currentUser &&
                 <div className="hidden md:inline-flex ml-2 items-center rounded-full bg-gray-100 p-2">
                     <SearchIcon className="h-6 text-gray-500 flex-shrink"/>
@@ -44,7 +49,8 @@ function Header({currentUser}) {
                         width={35}
                         height={35}
                         layout="fixed"/>
-                    <p className="whitespace-nowrap font-semibold pr-3">
+                    <p onClick={goToUserProfile}
+                       className="whitespace-nowrap font-semibold pr-3 cursor-pointer">
                         {currentUser.name}
                     </p>
                     <Link href={'/auth/signout'}>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import {useRef, useState} from "react";
 import {CameraIcon} from "@heroicons/react/solid";
 import useRequest from "../hooks/use-request";
+import Router from "next/router";
 
 const FormData = require('form-data');
 
@@ -54,15 +55,20 @@ function InputBox({currentUser}) {
         setImageToPost(null);
     }
 
+    const goToUserProfile = () => {
+        Router.push(`/user/${currentUser.id}`);
+    }
+
     return (
         <div className="bg-white p-2 rounded-2xl shadow-md
         text-gray-500 font-medium mt-6">
             <div className="flex space-x-4 p-4 items-center">
                 <Image
-                    className="rounded-full"
+                    onClick={goToUserProfile}
+                    className="rounded-full cursor-pointer"
                     src={currentUser.avatar}
-                    width={35}
-                    height={35}
+                    width={50}
+                    height={50}
                     layout="fixed"/>
 
                 <form className="flex flex-1" onSubmit={sendPost}>

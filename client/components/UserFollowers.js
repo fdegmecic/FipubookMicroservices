@@ -15,7 +15,7 @@ function Contacts() {
         <div className="hidden lg:flex flex-col w-60 p-2 mt-5">
             {realTimeFollowers && <div className="flex justify-between items-center text-gray-500
             mb-5">
-                <h2 className="text-xl">Contacts</h2>
+                <h2 className="text-xl">Users you follow</h2>
             </div>}
 
             {realTimeFollowers?.map(follower => (

@@ -7,6 +7,8 @@ import {createPostRouter} from "./routes/createPost";
 import {updatePostRouter} from "./routes/updatePost";
 import {getPostRouter} from "./routes/getPost";
 import {getPostsRouter} from "./routes/getPosts";
+import {likePostRouter} from "./routes/likePost";
+import {unlikePostRouter} from "./routes/unlikePost";
 
 const app = express();
 app.set('trust proxy', true);
@@ -24,6 +26,8 @@ app.use(createPostRouter);
 app.use(updatePostRouter);
 app.use(getPostRouter);
 app.use(getPostsRouter);
+app.use(likePostRouter);
+app.use(unlikePostRouter);
 
 app.all('*', async (req, res) => {
     throw new NotFoundError();

@@ -1,18 +1,21 @@
 import mongoose from "mongoose";
 import {updateIfCurrentPlugin} from "mongoose-update-if-current";
+import {PostLikeDocument} from "./postLike";
 
 interface PostAttributes {
     postText: string;
     postUrl?: string;
+    postLikes?: PostLikeDocument;
     userId: string;
     userName: string;
     userAvatar: string;
     created: Date,
 }
 
-interface PostDocument extends mongoose.Document {
+export interface PostDocument extends PostAttributes, mongoose.Document {
     postText: string;
     postUrl?: string;
+    postLikes?: PostLikeDocument;
     userId: string;
     userName: string;
     userAvatar: string;
@@ -33,6 +36,11 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    postLikes:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PostLike',
+        required:false,
+    }],
     userId: {
         type: String,
         required: true

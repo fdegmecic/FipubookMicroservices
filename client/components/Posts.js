@@ -2,7 +2,7 @@ import Post from "./Post";
 import axios from "axios";
 import {useEffect, useState} from "react";
 
-function Posts({posts}) {
+function Posts({currentUser, posts}) {
     const [realTimePosts, setRealTimePosts] = useState([]);
 
     useEffect(async () => {
@@ -11,27 +11,42 @@ function Posts({posts}) {
         setRealTimePosts(data)
     }, [])
 
+    const getLikesForPost = (postLikes, postId) => {
+        return postLikes.filter(likes => (
+            likes.post === postId
+        ))
+    }
+
     return (
         <div>
             {realTimePosts ?
                 realTimePosts.map(post => (
                     <Post created={post.created}
                           key={post.id}
+                          postId={post.id}
                           postText={post.postText}
                           postUrl={post.postUrl}
-                          user={post.userName}
+                          postLikes={getLikesForPost(post.postLikes, post.id)}
+                          userId={post.userId}
+                          userName={post.userName}
                           userAvatar={post.userAvatar}
-                    />
-                )) :
+                          currentUser={currentUser}
+                    />))
+                :
                 posts.map(post => (
                     <Post created={post.created}
                           key={post.id}
+                          postId={post.id}
                           postText={post.postText}
                           postUrl={post.postUrl}
-                          user={post.userName}
+                          postLikes={getLikesForPost(post.postLikes, post.id)}
+                          userId={post.userId}
+                          userName={post.userName}
                           userAvatar={post.userAvatar}
+                          currentUser={currentUser}
                     />
-                ))}
+                ))
+            }
         </div>
     );
 }
