@@ -6,19 +6,15 @@ import {Post} from "../models/post";
 
 const router = express.Router();
 
-router.post('/api/comments', requireAuth, [
+router.post('/api/comments/:id', requireAuth, [
     body('commentText')
         .not()
         .isEmpty()
         .withMessage('Comment text is required'),
-    body('postId')
-        .not()
-        .isEmpty()
-        .withMessage('Postid is required'),
 ], validateRequest, async (req: Request, res: Response) => {
-    const {commentText, postId} = req.body;
+    const {commentText} = req.body;
 
-    const post = await Post.findById(postId);
+    const post = await Post.findById(req.params.id);
     if(!post){
         throw new NotFoundError();
     }
@@ -27,6 +23,7 @@ router.post('/api/comments', requireAuth, [
         commentText,
         post,
         userId: req.currentUser!.id,
+        userAvatar: req.currentUser!.avatar,
         created: new Date(),
     })
 
@@ -34,6 +31,5 @@ router.post('/api/comments', requireAuth, [
 
     res.status(201).send(comment);
 })
-
 
 export {router as createCommentRouter}

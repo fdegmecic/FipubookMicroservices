@@ -1,18 +1,22 @@
 import Image from "next/image";
 import {ChatAltIcon, ThumbUpIcon} from "@heroicons/react/solid";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Router from "next/router";
 import useRequestNoErrors from "../hooks/use-request-no-errors";
+import CommentSection from "./CommentSection";
 
 function Post({created, postId, postText, postLikes, postUrl, userId, userName, userAvatar, currentUser}) {
     const [likedStatus, setLikedStatus] = useState(false);
+    const [postLikesSize, setPostLikesSize] = useState(postLikes.length);
+    const [commentSectionShow, setCommentSectionShow] = useState(false)
 
     const likePost = async () => {
         const {doRequest} = useRequestNoErrors({
             url: `/api/posts/like/${postId}`,
             method: 'patch',
         })
-
+        setLikedStatus(!likedStatus)
+        setPostLikesSize(postLikesSize + 1)
         await doRequest();
     }
 
@@ -21,7 +25,8 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
             url: `/api/posts/like/${postId}`,
             method: 'delete',
         })
-
+        setLikedStatus(!likedStatus)
+        setPostLikesSize(postLikesSize - 1)
         await doRequest();
     }
 
@@ -29,16 +34,20 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
         Router.push(`/user/${userId}`);
     }
 
+    const showCommentSection = () => {
+        setCommentSectionShow(!commentSectionShow)
+    }
+
     const maybePluralize = (count, noun, suffix = 's') =>
         `${count} ${noun}${count !== 1 ? suffix : ''}`;
 
-    useEffect(() => {
+    useEffect(async () => {
         postLikes.map(postLike => {
             if (postLike.userId === currentUser.id) {
                 setLikedStatus(true)
             }
         })
-    }, [postLikes])
+    }, [])
 
     return (
         <div className="flex flex-col">
@@ -78,16 +87,16 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
                     />
                 </div>
             )}
-            {postLikes.length !== 0 && (
+            {postLikesSize !== 0 && (
                 <div className="flex items-center rounded-b2xl bg-white shadow-md
                     text-blue-500 border-t">
                     <div className="justify-start inputIcon rounded-none rounded-bl-2xl">
                         <ThumbUpIcon className="h-4"/>
                         <p className="text-xs sm:text-base">
-                            {`${maybePluralize(postLikes.length, "like")}`}
+                            {`${maybePluralize(postLikesSize, "like")}`}
                         </p>
                     </div>
-                    <div className="justify-end inputIcon rounded-none rounded-br-2xl">
+                    <div className="justify-end inputIcon rounded-none rounded-br-2xl text-gray-400">
                         <ChatAltIcon className="h-4"/>
                         <p className="text-xs sm:text-base">{`comments`}</p>
                     </div>
@@ -98,7 +107,7 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
                 {likedStatus ?
                     (
                         <div onClick={unLikePost}
-                             className="text-blue-400 disabled inputIcon rounded-none rounded-bl-2xl
+                             className="text-blue-400 inputIcon rounded-none rounded-bl-2xl
                              hover:text-red-400">
                             <ThumbUpIcon className="h-4"/>
                             <p className="text-xs sm:text-base">Unlike</p>
@@ -110,11 +119,16 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
                             <p className="text-xs sm:text-base">Like</p>
                         </div>
                     )}
-                <div className="inputIcon rounded-none rounded-br-2xl">
+                <div onClick={showCommentSection}
+                     className="inputIcon rounded-none rounded-br-2xl">
                     <ChatAltIcon className="h-4"/>
                     <p className="text-xs sm:text-base">Comment</p>
                 </div>
             </div>
+            <CommentSection commentSectionShow={commentSectionShow}
+                            currentUser={currentUser}
+                            postId={postId}
+                            userId={userId}/>
         </div>
     )
 }

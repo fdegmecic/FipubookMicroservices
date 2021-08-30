@@ -1,8 +1,10 @@
 import Image from "next/image";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {CameraIcon} from "@heroicons/react/solid";
 import useRequest from "../hooks/use-request";
 import Router from "next/router";
+import Posts from "./Posts";
+import axios from "axios";
 
 const FormData = require('form-data');
 
@@ -12,6 +14,7 @@ function InputBox({currentUser}) {
     const [imageToPost, setImageToPost] = useState('');
     const [imageToDisplay, setImageToDisplay] = useState('');
     const [postText, setPostText] = useState('');
+    const [render, setRender] = useState(false)
 
     const formDataPost = new FormData()
     formDataPost.append("postText", postText)
@@ -25,7 +28,7 @@ function InputBox({currentUser}) {
         body: formDataPost,
     })
 
-    const sendPost = (e) => {
+    const sendPost =async  (e) => {
         e.preventDefault();
 
         if (!inputRef.current.value) {
@@ -33,8 +36,9 @@ function InputBox({currentUser}) {
         }
 
         inputRef.current.value = "";
-        doRequest()
+        await doRequest()
         removeImage()
+        setRender(true)
     }
 
     const addImageToPost = (e) => {
@@ -58,6 +62,15 @@ function InputBox({currentUser}) {
     const goToUserProfile = () => {
         Router.push(`/user/${currentUser.id}`);
     }
+
+    const [realTimePosts, setRealTimePosts] = useState([]);
+
+    useEffect(async () => {
+        const {data} = await axios.get('/api/posts');
+
+        setRealTimePosts(data)
+        setRender(false)
+    }, [render])
 
     return (
         <div className="bg-white p-2 rounded-2xl shadow-md
@@ -104,6 +117,7 @@ function InputBox({currentUser}) {
                         hidden/>
                 </div>
             </div>
+            <Posts currentUser={currentUser} posts={realTimePosts}/>
         </div>
     )
 }

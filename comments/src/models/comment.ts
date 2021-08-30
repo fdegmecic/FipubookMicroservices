@@ -5,6 +5,7 @@ interface CommentAttributes {
     commentText: string;
     post: PostDocument;
     userId: string;
+    userAvatar: string;
     created: Date;
 }
 
@@ -12,6 +13,7 @@ interface CommentDocument extends mongoose.Document {
     commentText: string;
     post: PostDocument;
     userId: string;
+    userAvatar: string;
     created: Date;
 }
 
@@ -29,6 +31,10 @@ const commentSchema = new mongoose.Schema({
         ref: 'Post'
     },
     userId: {
+        type: String,
+        required: true
+    },
+    userAvatar: {
         type: String,
         required: true
     },

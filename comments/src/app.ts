@@ -5,7 +5,6 @@ import cookieSession from "cookie-session";
 
 import {errorHandler, NotFoundError, currentUser} from '@fdfipubook/common';
 import {createCommentRouter} from "./routes/createComment";
-import {updateCommentRouter} from "./routes/updateComment";
 import {getCommentsRouter} from "./routes/getComments";
 
 const app = express();
@@ -21,7 +20,6 @@ app.use(
 app.use(currentUser);
 
 app.use(createCommentRouter);
-app.use(updateCommentRouter);
 app.use(getCommentsRouter);
 
 app.all('*', async (req, res) => {
