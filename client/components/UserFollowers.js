@@ -6,23 +6,24 @@ function Contacts() {
     const [realTimeFollowers, setRealTimeFollowers] = useState([]);
 
     useEffect(async () => {
-        const {data} = await axios.get('/api/followers');
+        const {data} = await axios.get('/api/followers/following');
 
         setRealTimeFollowers(data)
     }, [])
 
     return (
         <div className="hidden lg:flex flex-col w-60 p-2 mt-5">
-            {realTimeFollowers && <div className="flex justify-between items-center text-gray-500
+            {realTimeFollowers.length!==0 && <div className="flex justify-between items-center text-gray-500
             mb-5">
-                <h2 className="text-xl">Users you follow</h2>
+                <h2 className="text-xl">Users that follow you: </h2>
             </div>}
 
             {realTimeFollowers?.map(follower => (
                 <Contact
-                    key={follower.followingId}
-                    src={follower.followingAvatar}
-                    name={follower.followingName}
+                    key={follower.id}
+                    followerId={follower.followerId}
+                    src={follower.followerAvatar}
+                    name={follower.followerName}
                 />
             ))}
         </div>

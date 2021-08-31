@@ -4,9 +4,10 @@ import {useEffect, useRef, useState} from "react";
 import Comment from "./Comment";
 import axios from "axios";
 
-function CommentSection({commentSectionShow, currentUser, postId, userId}) {
+function CommentSection({commentSectionShow, currentUser, postId, userId, callBack}) {
     const [commentText, setComment] = useState('')
-    const [comments, setComments] = useState('')
+    const [comments, setComments] = useState([])
+    const [render, setRender] = useState(false)
     const inputRef = useRef(null);
 
     const sendComment = async (e) => {
@@ -23,19 +24,22 @@ function CommentSection({commentSectionShow, currentUser, postId, userId}) {
         })
 
         inputRef.current.value = "";
-        await doRequest()
+        await doRequest();
+        setRender(true);
+        callBack();
     }
 
     useEffect(async () => {
         const {data} = await axios.get(`/api/comments/${postId}`)
 
         setComments(data)
-    }, [])
+        setRender(false)
+    }, [render])
 
     return (
         <div>
             {commentSectionShow && (
-                <div>
+                <div className="bg-white border border-2">
                     <div className="flex space-x-4 p-4 items-center">
                         <Image
                             className="rounded-full cursor-pointer"
@@ -57,7 +61,7 @@ function CommentSection({commentSectionShow, currentUser, postId, userId}) {
                     </div>
                     <div >
                         {comments.map(comment => (
-                            <Comment commentText={comment.commentText} currentUser={currentUser}/>))}
+                            <Comment key={comment.id} commentText={comment.commentText} userAvatar={comment.userAvatar}/>))}
                     </div>
                 </div>
             )}

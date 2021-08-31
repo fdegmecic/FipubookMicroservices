@@ -1,5 +1,5 @@
 import Image from "next/image";
-import {useEffect, useRef, useState} from "react";
+import {useEffect   , useRef, useState} from "react";
 import {CameraIcon} from "@heroicons/react/solid";
 import useRequest from "../hooks/use-request";
 import Router from "next/router";
@@ -14,6 +14,7 @@ function InputBox({currentUser}) {
     const [imageToPost, setImageToPost] = useState('');
     const [imageToDisplay, setImageToDisplay] = useState('');
     const [postText, setPostText] = useState('');
+    const [realTimePosts, setRealTimePosts] = useState([]);
     const [render, setRender] = useState(false)
 
     const formDataPost = new FormData()
@@ -63,17 +64,14 @@ function InputBox({currentUser}) {
         Router.push(`/user/${currentUser.id}`);
     }
 
-    const [realTimePosts, setRealTimePosts] = useState([]);
-
     useEffect(async () => {
-        const {data} = await axios.get('/api/posts');
-
-        setRealTimePosts(data)
+        const {data: postData} = await axios.get('/api/posts');
+        setRealTimePosts(postData)
         setRender(false)
     }, [render])
 
     return (
-        <div className="bg-white p-2 rounded-2xl shadow-md
+        <div className="bg-gray-50 p-2 rounded-2xl shadow-md
         text-gray-500 font-medium mt-6">
             <div className="flex space-x-4 p-4 items-center">
                 <Image

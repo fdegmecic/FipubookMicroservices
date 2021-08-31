@@ -1,14 +1,46 @@
 import Image from "next/image";
 import {useEffect, useState} from "react";
+import useRequestNoErrors from "../hooks/use-request-no-errors";
+import axios from "axios";
 
-function UserInformation ({currentUser, user}) {
+function UserInformation({currentUser, user}) {
     const [hideFollow, setHideFollow] = useState(true)
+    const [followedStatus, setFollowedStatus] = useState(false)
 
-    useEffect(() => {
-        if(currentUser.id === user.id) {
+    const followUser = async () => {
+        const {doRequest} = useRequestNoErrors({
+            url: `/api/followers/${user.id}`,
+            method: 'post'
+        })
+
+        await doRequest()
+        setFollowedStatus(true)
+    }
+
+    const unFollowUser = async() => {
+        const {doRequest} = useRequestNoErrors({
+            url: `/api/followers/${user.id}`,
+            method: 'delete'
+        })
+
+        await doRequest()
+        setFollowedStatus(false)
+    }
+
+    useEffect(async () => {
+
+        const {data} = await axios.get('/api/followers')
+
+        data.map(follower => {
+            if (follower.followingId === user.id) {
+                setFollowedStatus(true)
+            }
+        })
+        setHideFollow(true)
+        if (currentUser.id === user.id) {
             setHideFollow(false)
         }
-    }, [])
+    }, [followedStatus, user])
 
     return (
         <div className="bg-white p-2 rounded-2xl shadow-md
@@ -22,7 +54,7 @@ function UserInformation ({currentUser, user}) {
                 />
             </div>
             <div className="flex justify-evenly p-3 border-t bg-gray-100">
-                <p >About</p>
+                <p>About</p>
             </div>
             <div className="flex justify-evenly p-3 border-t">
                 <p>Name:</p>
@@ -30,12 +62,15 @@ function UserInformation ({currentUser, user}) {
             </div>
             {hideFollow && <div className="flex justify-between items-center rounded-b2xl bg-white shadow-md
             text-gray-400 border-t">
-                <div className="inputIcon rounded-none rounded-bl-2xl bg-blue-200">
-                    <p className="sm:text-base">Follow</p>
-                </div>
-                <div className="inputIcon rounded-none rounded-br-2xl bg-red-200">
-                    <p className="sm:text-base">Unfollow</p>
-                </div>
+                {followedStatus ?
+                    <div onClick={unFollowUser} className="inputIcon rounded-none rounded-bl-2xl bg-red-200">
+                        <button  className="sm:text-base">UnFollow</button>
+                    </div>
+                    :
+                    <div onClick={followUser} className="inputIcon rounded-none rounded-bl-2xl bg-blue-200">
+                        <button  className="sm:text-base">Follow</button>
+                    </div>
+                }
             </div>}
         </div>
     )

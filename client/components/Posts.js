@@ -2,7 +2,7 @@ import Post from "./Post";
 
 function Posts({currentUser, posts}) {
     const getLikesForPost = (postLikes, postId) => {
-        return postLikes.filter(likes => (
+        return postLikes?.filter(likes => (
             likes.post === postId
         ))
     }

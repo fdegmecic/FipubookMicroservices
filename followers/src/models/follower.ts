@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 
 interface FollowerAttributes {
     followerId: string;
+    followerName: string;
+    followerAvatar: string;
     followingId: string;
     followingName: string;
     followingAvatar: string;
@@ -9,6 +11,8 @@ interface FollowerAttributes {
 
 interface FollowerDocument extends mongoose.Document {
     followerId: string;
+    followerName: string;
+    followerAvatar: string;
     followingId: string;
     followingName: string;
     followingAvatar: string;
@@ -20,6 +24,14 @@ interface FollowerModel extends mongoose.Model<FollowerDocument> {
 
 const followerSchema = new mongoose.Schema<FollowerDocument>({
     followerId: {
+        type: String,
+        required: true,
+    },
+    followerName: {
+        type: String,
+        required: true,
+    },
+    followerAvatar: {
         type: String,
         required: true,
     },

@@ -1,14 +1,17 @@
 import Image from "next/image";
 import {ChatAltIcon, ThumbUpIcon} from "@heroicons/react/solid";
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import Router from "next/router";
 import useRequestNoErrors from "../hooks/use-request-no-errors";
 import CommentSection from "./CommentSection";
+import axios from "axios";
 
 function Post({created, postId, postText, postLikes, postUrl, userId, userName, userAvatar, currentUser}) {
     const [likedStatus, setLikedStatus] = useState(false);
-    const [postLikesSize, setPostLikesSize] = useState(postLikes.length);
+    const [commentsSize, setCommentsSize] = useState([]);
+    const [postLikesSize, setPostLikesSize] = useState(postLikes?.length);
     const [commentSectionShow, setCommentSectionShow] = useState(false)
+    const [reload, setReload] = useState(false);
 
     const likePost = async () => {
         const {doRequest} = useRequestNoErrors({
@@ -38,12 +41,22 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
         setCommentSectionShow(!commentSectionShow)
     }
 
-    const maybePluralize = (count, noun, suffix = 's') =>
-        `${count} ${noun}${count !== 1 ? suffix : ''}`;
+    const maybePluralize = (count, noun, suffix = 's') => {
+        if (count === 0) {
+            return `0 ${noun}${suffix}`
+        }
+        return `${count} ${noun}${count !== 1 ? suffix : ''}`;
+    }
+
+    const callBack = useCallback(async () => {
+        const {data} = await axios.get(`/api/comments/${postId}`)
+        setCommentsSize(data.length)
+        setReload(true)
+    }, [reload])
 
     useEffect(async () => {
         postLikes.map(postLike => {
-            if (postLike.userId === currentUser.id) {
+            if (postLike.userId === currentUser?.id) {
                 setLikedStatus(true)
             }
         })
@@ -51,7 +64,7 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
 
     return (
         <div className="flex flex-col">
-            <div className="p-5 bg-white mt-5 rounded-t-2xl shadow-sm">
+            <div className="p-5 bg-white mt-2 rounded-t-2xl shadow-sm border border-2">
                 <div className="flex items-center space-x-2">
                     <Image
                         onClick={goToUserProfile}
@@ -87,19 +100,34 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
                     />
                 </div>
             )}
-            {postLikesSize !== 0 && (
-                <div className="flex items-center rounded-b2xl bg-white shadow-md
-                    text-blue-500 border-t">
-                    <div className="justify-start inputIcon rounded-none rounded-bl-2xl">
-                        <ThumbUpIcon className="h-4"/>
-                        <p className="text-xs sm:text-base">
-                            {`${maybePluralize(postLikesSize, "like")}`}
-                        </p>
-                    </div>
-                    <div className="justify-end inputIcon rounded-none rounded-br-2xl text-gray-400">
-                        <ChatAltIcon className="h-4"/>
-                        <p className="text-xs sm:text-base">{`comments`}</p>
-                    </div>
+            {(postLikesSize !== 0 || commentsSize !== 0) && (
+                <div className="flex items-center rounded-b2xl bg-white shadow-md border-t">
+                    {(postLikesSize !== 0 ? (
+                        <div className="justify-start inputIcon rounded-none rounded-bl-2xl text-blue-500">
+                            <ThumbUpIcon className="h-4"/>
+                            <p className="text-xs sm:text-base">
+                                {`${maybePluralize(postLikesSize, "like")}`}
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="justify-start inputIcon rounded-none rounded-bl-2xl text-gray-400">
+                            <ThumbUpIcon className="h-4"/>
+                            <p className="text-xs sm:text-base">
+                                {`${maybePluralize(postLikesSize, "like")}`}
+                            </p>
+                        </div>
+                    ))}
+                    {commentsSize !== 0 ?
+                        <div className="justify-end inputIcon rounded-none rounded-br-2xl text-blue-500">
+                            <ChatAltIcon className="h-4"/>
+                            <p className="text-xs sm:text-base">{`${maybePluralize(commentsSize, "comment")}`}</p>
+                        </div>
+                        :
+                        <div className="justify-end inputIcon rounded-none rounded-br-2xl text-gray-400">
+                            <ChatAltIcon className="h-4"/>
+                            <p className="text-xs sm:text-base">{`${maybePluralize(commentsSize, "comment")}`}</p>
+                        </div>
+                    }
                 </div>
             )}
             <div className="flex justify-between items-center rounded-b2xl bg-white shadow-md
@@ -125,10 +153,13 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
                     <p className="text-xs sm:text-base">Comment</p>
                 </div>
             </div>
-            <CommentSection commentSectionShow={commentSectionShow}
-                            currentUser={currentUser}
-                            postId={postId}
-                            userId={userId}/>
+            <CommentSection
+                commentSectionShow={commentSectionShow}
+                currentUser={currentUser}
+                postId={postId}
+                userId={userId}
+                callBack={callBack}
+            />
         </div>
     )
 }

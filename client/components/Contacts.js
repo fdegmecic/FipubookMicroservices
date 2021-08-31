@@ -20,7 +20,8 @@ function Contacts() {
 
             {realTimeFollowers?.map(follower => (
                 <Contact
-                    key={follower.followingId}
+                    key={follower.id}
+                    followerId={follower.followingId}
                     src={follower.followingAvatar}
                     name={follower.followingName}
                 />
