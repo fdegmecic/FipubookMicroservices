@@ -1,8 +1,8 @@
 import Image from "next/image";
 
-import {SearchIcon} from "@heroicons/react/outline";
 import Link from 'next/link';
 import Router from "next/router";
+import SearchBar from "./SearchBar";
 
 function Header({currentUser}) {
     const goToUserProfile = () => {
@@ -25,20 +25,12 @@ function Header({currentUser}) {
                     layout="fixed"
                 />
                 {currentUser &&
-                <div className="hidden md:inline-flex ml-2 items-center rounded-full bg-gray-100 p-2">
-                    <SearchIcon className="h-6 text-gray-500 flex-shrink"/>
-                    <input
-                        className="hidden lg:inline-flex ml-2 items-centered bg-transparent
-                outline-none placeholder-gray-500 flex-shrink"
-                        type="text"
-                        placeholder="Search Fipubook"/>
-                </div>}
+                <SearchBar />
+                }
             </div>
-
             <div className="flex justify-center flex-grow">
 
             </div>
-
             <div className="flex items-center justify-end sm:space-x-2">
                 {currentUser &&
                 <>

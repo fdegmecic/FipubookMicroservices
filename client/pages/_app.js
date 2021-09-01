@@ -5,16 +5,14 @@ import SignIn from "./auth/signin";
 import Header from "../components/Header";
 
 const AppComponent = ({Component, pageProps, currentUser}) => {
-    if(!currentUser) {
-        return <SignIn />
-    }
-
     return <div className="h-screen bg-gray-100 overflow-hidden">
         <Header currentUser={currentUser}/>
         {currentUser &&
-        <>
             <Component currentUser={currentUser} {...pageProps}/>
-        </>}
+        }
+        {!currentUser &&
+        <SignIn/>
+        }
     </div>
 };
 

@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema<UserDocument>({
     name: {
         type: String,
         required: true,
+    },
+    avatar: {
+        type: String,
+        required: true,
     }
 }, {
     toJSON: {
@@ -36,6 +40,7 @@ userSchema.statics.build = (attributes: UserAttributes) => {
     return new User({
         _id:attributes.id,
         name:attributes.name,
+        avatar:attributes.avatar,
     });
 }
 

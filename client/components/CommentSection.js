@@ -26,7 +26,6 @@ function CommentSection({commentSectionShow, currentUser, postId, userId, callBa
         inputRef.current.value = "";
         await doRequest();
         setRender(true);
-        callBack();
     }
 
     useEffect(async () => {
@@ -34,6 +33,7 @@ function CommentSection({commentSectionShow, currentUser, postId, userId, callBa
 
         setComments(data)
         setRender(false)
+        callBack(comments.length);
     }, [render])
 
     return (
