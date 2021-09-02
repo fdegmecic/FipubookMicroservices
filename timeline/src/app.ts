@@ -4,6 +4,7 @@ import {json} from 'body-parser';
 import cookieSession from "cookie-session";
 
 import {errorHandler, NotFoundError, currentUser} from '@fdfipubook/common';
+import {getUserPosts} from "./routes/getUserTimeline";
 
 const app = express();
 app.set('trust proxy', true);
@@ -16,6 +17,7 @@ app.use(
 )
 
 app.use(currentUser);
+app.use(getUserPosts);
 
 app.all('*', async (req, res) => {
     throw new NotFoundError();

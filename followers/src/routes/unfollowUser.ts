@@ -2,6 +2,8 @@ import express, {Request, Response} from 'express';
 import {BadRequestError, NotFoundError, requireAuth} from "@fdfipubook/common";
 import {User} from "../models/user";
 import {Follower} from "../models/follower";
+import {natsWrapper} from "../nats-wrapper";
+import {UserUnfollowedPublisher} from "../events/publishers/user-unfollowed-publisher";
 
 const router = express.Router();
 
@@ -20,6 +22,11 @@ router.delete('/api/followers/:userId', requireAuth, async (req: Request, res: R
     }
 
     await Follower.findOneAndDelete({followerId: follower.id, followingId: following.id})
+
+    new UserUnfollowedPublisher(natsWrapper.client).publish({
+        followerId: req.currentUser!.id,
+        followingId: req.params.userId,
+    })
 
     res.status(200).send(true);
 })

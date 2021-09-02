@@ -4,6 +4,10 @@ import {natsWrapper} from "./nats-wrapper";
 import {app} from "./app";
 import {PostCreatedListener} from "./events/listeners/post-created-listener";
 import {UserFollowedListener} from "./events/listeners/user-followed-listener";
+import {PostUpdatedListener} from "./events/listeners/post-updated-listener";
+import {PostLikedListener} from "./events/listeners/post-liked-listener";
+import {PostUnlikedListener} from "./events/listeners/post-unliked-listener";
+import {UserUnfollowedListener} from "./events/listeners/user-unfollowed-listener";
 
 const start = async () => {
     if (!process.env.JWT_KEY) {
@@ -42,7 +46,11 @@ const start = async () => {
         process.on('SIGTERM', () => natsWrapper.client.close())
 
         new PostCreatedListener(natsWrapper.client).listen();
+        new PostUpdatedListener(natsWrapper.client).listen();
         new UserFollowedListener(natsWrapper.client).listen();
+        new UserUnfollowedListener(natsWrapper.client).listen();
+        new PostLikedListener(natsWrapper.client).listen();
+        new PostUnlikedListener(natsWrapper.client).listen();
 
         await mongoose.connect(process.env.MONGO_URI, {
             useNewUrlParser: true,

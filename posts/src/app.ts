@@ -5,8 +5,7 @@ import cookieSession from "cookie-session";
 import {errorHandler, NotFoundError, currentUser} from '@fdfipubook/common';
 import {createPostRouter} from "./routes/createPost";
 import {updatePostRouter} from "./routes/updatePost";
-import {getPostRouter} from "./routes/getPost";
-import {getPostsRouter} from "./routes/getPosts";
+import {getUserPosts} from "./routes/getUserPosts";
 import {likePostRouter} from "./routes/likePost";
 import {unlikePostRouter} from "./routes/unlikePost";
 
@@ -24,8 +23,7 @@ app.use(currentUser);
 
 app.use(createPostRouter);
 app.use(updatePostRouter);
-app.use(getPostRouter);
-app.use(getPostsRouter);
+app.use(getUserPosts);
 app.use(likePostRouter);
 app.use(unlikePostRouter);
 

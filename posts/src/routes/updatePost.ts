@@ -1,7 +1,9 @@
 import express, {Request, Response} from 'express';
 import {body} from "express-validator";
-import {validateRequest, NotFoundError, requireAuth, NotAuthorizedError} from "@fdfipubook/common";
+import {validateRequest, NotFoundError, requireAuth, BadRequestError} from "@fdfipubook/common";
 import {Post} from "../models/post";
+import {natsWrapper} from "../nats-wrapper";
+import {PostUpdatedPublisher} from "../events/publishers/post-updated-publisher";
 
 const router = express.Router();
 
@@ -18,11 +20,18 @@ router.patch('/api/posts/:id', requireAuth, [
     }
 
     if (post.userId !== req.currentUser!.id) {
-        throw new NotAuthorizedError();
+        throw new BadRequestError('This user cant edit this post')
     }
 
     post.set({
         postText: req.body.updateText,
+    })
+
+    new PostUpdatedPublisher(natsWrapper.client).publish({
+        id: post.id,
+        postText: post.postText,
+        userId: post.userId,
+        version: post.version,
     })
 
     await post.save();

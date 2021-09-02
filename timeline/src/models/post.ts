@@ -1,23 +1,28 @@
 import mongoose from "mongoose";
 import {updateIfCurrentPlugin} from "mongoose-update-if-current";
+import {PostLikeDocument} from "./postLike";
 
 interface PostAttributes {
     id: string;
     postText: string;
+    postImage?: string;
+    postLikes?: PostLikeDocument;
     userId: string;
-    userName:string;
-    userAvatar:string;
-    created:Date;
-    version:number;
+    userName: string;
+    userAvatar: string;
+    created: Date;
+    version: number;
 }
 
 export interface PostDocument extends mongoose.Document {
     postText: string;
+    postImage?: string;
+    postLikes?: PostLikeDocument;
     userId: string;
-    userName:string;
-    userAvatar:string;
-    created:Date;
-    version:number;
+    userName: string;
+    userAvatar: string;
+    created: Date;
+    version: number;
 }
 
 interface PostModel extends mongoose.Model<PostDocument> {
@@ -29,6 +34,15 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    postImage: {
+        type: String,
+        required: false
+    },
+    postLikes:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PostLike',
+        required:false,
+    }],
     userId: {
         type: String,
         required: true
@@ -56,14 +70,16 @@ const postSchema = new mongoose.Schema({
 postSchema.set('versionKey', 'version')
 postSchema.plugin(updateIfCurrentPlugin);
 
-postSchema.statics.build=(attributes: PostAttributes) => {
+postSchema.statics.build = (attributes: PostAttributes) => {
     return new Post({
-        _id:attributes.id,
-        postText:attributes.postText,
-        userId:attributes.userId,
-        userName:attributes.userName,
-        userAvatar:attributes.userAvatar,
-        version:attributes.version,
+        _id: attributes.id,
+        postText: attributes.postText,
+        postImage: attributes.postImage,
+        postLikes: attributes.postLikes,
+        userId: attributes.userId,
+        userName: attributes.userName,
+        userAvatar: attributes.userAvatar,
+        version: attributes.version,
     });
 }
 

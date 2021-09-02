@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
 interface FollowerAttributes {
-    followeeId: string;
     followerId: string;
+    followingId: string;
 }
 
 interface FollowerDocument extends mongoose.Document {
-    followeeId: string;
     followerId: string;
+    followingId: string;
 }
 
 interface FollowerModel extends mongoose.Model<FollowerDocument> {
@@ -15,11 +15,11 @@ interface FollowerModel extends mongoose.Model<FollowerDocument> {
 }
 
 const followerSchema = new mongoose.Schema<FollowerDocument>({
-    followeeId: {
+    followerId: {
         type: String,
         required: true,
     },
-    followerId: {
+    followingId: {
         type: String,
         required: true,
     },

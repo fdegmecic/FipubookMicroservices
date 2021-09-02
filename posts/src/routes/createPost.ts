@@ -20,16 +20,16 @@ router.post('/api/posts',
     ], validateRequest, async (req: Request, res: Response) => {
         const {postText, userName, userAvatar} = req.body;
 
-        let postUrl;
+        let postImage;
         if (req.file) {
             const uploadedImage = await cloudinary.uploader.upload(req.file?.path);
-            postUrl = uploadedImage.url;
+            postImage = uploadedImage.url;
         }
 
         //@ts-ignore
         const post = Post.build({
             postText,
-            postUrl,
+            postImage,
             postLikes: undefined,
             userId: req.currentUser!.id,
             userName,
@@ -41,6 +41,7 @@ router.post('/api/posts',
         new PostCreatedPublisher(natsWrapper.client).publish({
             id: post.id,
             postText: post.postText,
+            postImage: post.postImage,
             userId: post.userId,
             userName: post.userName,
             userAvatar: post.userAvatar,

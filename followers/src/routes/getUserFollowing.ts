@@ -12,13 +12,13 @@ router.get('/api/followers/following', requireAuth, async (req: Request, res: Re
         throw new NotFoundError();
     }
 
-    const followers = await Follower.find({followingId: user.id});
+    const following = await Follower.find({followingId: user.id});
 
-    if(!followers) {
+    if(!following) {
         throw new NotFoundError();
     }
 
-    res.status(201).send(followers);
+    res.status(201).send(following);
 })
 
 

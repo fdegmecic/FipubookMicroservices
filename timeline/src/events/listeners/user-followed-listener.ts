@@ -8,11 +8,13 @@ export class UserFollowedListener extends Listener<UserFollowedEvent> {
     queueGroupName = queueGroupName;
 
     async onMessage(data: UserFollowedEvent["data"], msg: Message) {
-        const {followeeId, followerId} = data;
-        const post = Follower.build({
-            followeeId, followerId
+        const {followerId, followingId} = data;
+
+        const follower = Follower.build({
+             followerId, followingId
         });
-        await post.save();
+
+        await follower.save();
 
         msg.ack();
     }

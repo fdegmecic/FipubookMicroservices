@@ -4,7 +4,7 @@ import {PostLikeDocument} from "./postLike";
 
 interface PostAttributes {
     postText: string;
-    postUrl?: string;
+    postImage?: string;
     postLikes?: PostLikeDocument;
     userId: string;
     userName: string;
@@ -14,7 +14,7 @@ interface PostAttributes {
 
 export interface PostDocument extends PostAttributes, mongoose.Document {
     postText: string;
-    postUrl?: string;
+    postImage?: string;
     postLikes?: PostLikeDocument;
     userId: string;
     userName: string;
@@ -32,7 +32,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    postUrl: {
+    postImage: {
         type: String,
         required: false,
     },

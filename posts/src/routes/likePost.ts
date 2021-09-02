@@ -2,6 +2,8 @@ import express, {Request, Response} from 'express';
 import {NotFoundError, requireAuth, BadRequestError} from "@fdfipubook/common";
 import {Post} from "../models/post";
 import {PostLike} from "../models/postLike";
+import {PostLikedPublisher} from "../events/publishers/post-liked-publisher";
+import {natsWrapper} from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -30,6 +32,10 @@ router.patch('/api/posts/like/:id', requireAuth, async (req: Request, res: Respo
         useFindAndModify: false
     }).populate('postLikes');
 
+    new PostLikedPublisher(natsWrapper.client).publish({
+        postId: post.id,
+        userId: req.currentUser!.id,
+    })
 
     res.status(200).send(updated)
 })

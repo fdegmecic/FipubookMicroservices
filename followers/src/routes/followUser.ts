@@ -2,6 +2,8 @@ import express, {Request, Response} from 'express';
 import {BadRequestError, NotFoundError, requireAuth} from "@fdfipubook/common";
 import {User} from "../models/user";
 import {Follower} from "../models/follower";
+import {UserFollowedPublisher} from "../events/publishers/user-followed-publisher";
+import {natsWrapper} from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -26,6 +28,11 @@ router.post('/api/followers/:userId', requireAuth, async (req: Request, res: Res
         followingId: following.id,
         followingName: following.name,
         followingAvatar: following.avatar,
+    })
+
+    new UserFollowedPublisher(natsWrapper.client).publish({
+        followerId: follow.followerId,
+        followingId: follow.followingId,
     })
 
     await follow.save();

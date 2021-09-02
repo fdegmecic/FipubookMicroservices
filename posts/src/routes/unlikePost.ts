@@ -2,6 +2,8 @@ import express, {Request, Response} from 'express';
 import {BadRequestError, NotFoundError, requireAuth} from "@fdfipubook/common";
 import {Post} from "../models/post";
 import {PostLike} from "../models/postLike";
+import {natsWrapper} from "../nats-wrapper";
+import {PostUnlikedPublisher} from "../events/publishers/post-unliked-publisher";
 
 const router = express.Router();
 
@@ -16,9 +18,8 @@ router.delete('/api/posts/like/:id', requireAuth, async (req: Request, res: Resp
 
     const existingPostLike = await PostLike.findOne({userId: req.currentUser!.id, post: postId});
 
-
     if (!existingPostLike) {
-        throw new BadRequestError('No like to remove')
+        throw new BadRequestError('Cannot unlike this post')
     }
 
     const {_id: postLikeId} = existingPostLike;
@@ -32,7 +33,12 @@ router.delete('/api/posts/like/:id', requireAuth, async (req: Request, res: Resp
         useFindAndModify: false
     });
 
-    await Post.updateOne({})
+    new PostUnlikedPublisher(natsWrapper.client).publish({
+        postId: postId,
+        userId: req.currentUser!.id,
+        postLikeId: postLikeId,
+    })
+
     await PostLike.findByIdAndDelete(postLikeId);
 
     res.status(200).send(true);
