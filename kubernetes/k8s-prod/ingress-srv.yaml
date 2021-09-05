@@ -38,18 +38,18 @@ spec:
                 name: search-srv
                 port:
                   number: 3000
-          - path: /api/timeline/?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: timeline-srv
-                port:
-                  number: 3000
           - path: /api/followers/?(.*)
             pathType: Prefix
             backend:
               service:
                 name: followers-srv
+                port:
+                  number: 3000
+          - path: /api/timeline/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: timeline-srv
                 port:
                   number: 3000
           - path: /?(.*)
