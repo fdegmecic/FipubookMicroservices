@@ -12,8 +12,9 @@ Mentor: doc. dr. sc.  Nikola Tanković
 # Architecture:
 Technologies used: React(Next.js), Node.js(Express), Kubernetes, Skaffold, Docker, Google Kubernetes Engine, MongoDb, NATS streaming(events)
 
-Red -> to be implemented
+[Live app: (Digital Ocean host)](http://www.fipubook-microservices-prod.com/)
 
-![Fipubook-Architecture (1)](https://user-images.githubusercontent.com/42947589/130504050-6a7420f6-606d-4141-af16-cf10f4507a46.png)
+![Fipubook-Architecture drawio](https://user-images.githubusercontent.com/42947589/132140228-6804e171-1b90-4c05-8867-708241bffdf1.png)
 
-
+#Database:
+![Fipubook-Database drawio](https://user-images.githubusercontent.com/42947589/132140232-04f8aa7e-338b-4449-8573-ac6504437241.png)
