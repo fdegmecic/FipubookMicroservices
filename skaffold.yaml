@@ -4,6 +4,7 @@ deploy:
   kubectl:
     manifests:
       - ./kubernetes/k8s/*
+      - ./kubernetes/k8s-dev/*
 build:
   #local:
   #  push: false
