@@ -4,7 +4,7 @@ const buildClient = ({req}) => {
     if (typeof window === 'undefined') {
         //requests to server
         return axios.create({
-            baseURL: 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local',
+            baseURL: 'http://www.fipubook-microservices-prod.com/',
             headers: req.headers
         })
     } else {
