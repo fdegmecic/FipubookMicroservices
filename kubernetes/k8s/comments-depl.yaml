@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: comments
-          image: gcr.io/fipubook-dev/comments
+          image: fdegmecic/comments
           env:
             - name: NATS_URL
               value: 'http://nats-srv:4222'

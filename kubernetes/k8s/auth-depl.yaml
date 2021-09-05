@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: gcr.io/fipubook-dev/auth
+          image: fdegmecic/auth
           env:
             - name: NATS_URL
               value: 'http://nats-srv:4222'

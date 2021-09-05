@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: timeline
-          image: gcr.io/fipubook-dev/timeline
+          image: fdegmecic/timeline
           env:
             - name: NATS_URL
               value: 'http://nats-srv:4222'
