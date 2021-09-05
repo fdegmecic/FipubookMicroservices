@@ -16,4 +16,4 @@ jobs:
         with: 
           token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN}}
       - run: doctl kubernetes cluster kubeconfig save fipubook
-      - run: kubectl apply -f kubernetes/k8s
+      - run: kubectl apply -f kubernetes/k8s &&  kubectl apply -f kubernetes/k8s-dev
