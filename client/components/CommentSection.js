@@ -4,10 +4,9 @@ import {useEffect, useRef, useState} from "react";
 import Comment from "./Comment";
 import axios from "axios";
 
-function CommentSection({commentSectionShow, currentUser, postId, userId, callBack}) {
-    const [commentText, setComment] = useState('')
+function CommentSection({commentSectionShow, currentUser, postId, callBack}) {
+    const [commentText, setCommentText] = useState('')
     const [comments, setComments] = useState([])
-    const [render, setRender] = useState(false)
     const inputRef = useRef(null);
 
     const sendComment = async (e) => {
@@ -21,20 +20,22 @@ function CommentSection({commentSectionShow, currentUser, postId, userId, callBa
             url: `/api/comments/${postId}`,
             method: 'post',
             body: {commentText},
+            onSuccess: (comment) => setComments(comments => [...comments, comment])
         })
 
         inputRef.current.value = "";
         await doRequest();
-        setRender(true);
     }
 
     useEffect(async () => {
-        const {data} = await axios.get(`/api/comments/${postId}`)
+            const {data} = await axios.get(`/api/comments/${postId}`)
+            callBack(comments.length);
+            setComments(data)
+    }, [])
 
-        setComments(data)
-        setRender(false)
+    useEffect(async () => {
         callBack(comments.length);
-    }, [render])
+    }, [comments])
 
     return (
         <div>
@@ -53,15 +54,19 @@ function CommentSection({commentSectionShow, currentUser, postId, userId, callBa
                     flex-grow px-5 focus:outline-none"
                                 type="text"
                                 ref={inputRef}
-                                onChange={(e) => setComment(e.target.value)}/>
+                                onChange={(e) => setCommentText(e.target.value)}/>
                             <button hidden type="submit" onClick={sendComment}>
                                 Submit
                             </button>
                         </form>
                     </div>
-                    <div >
+                    <div>
                         {comments.map(comment => (
-                            <Comment key={comment.id} commentText={comment.commentText} userAvatar={comment.userAvatar}/>))}
+                            <Comment
+                                key={comment.id}
+                                commentText={comment.commentText}
+                                userAvatar={comment.userAvatar}
+                                userId={comment.userId}/>))}
                     </div>
                 </div>
             )}

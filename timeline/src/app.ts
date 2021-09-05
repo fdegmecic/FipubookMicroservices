@@ -1,14 +1,13 @@
 import express from 'express';
 import 'express-async-errors';
-import {json} from 'body-parser';
 import cookieSession from "cookie-session";
 
 import {errorHandler, NotFoundError, currentUser} from '@fdfipubook/common';
-import {getUserPosts} from "./routes/getUserTimeline";
+import {getUserTimelineRouter} from "./routes/getUserTimeline";
 
 const app = express();
 app.set('trust proxy', true);
-app.use(json());
+app.use(express.json());
 app.use(
     cookieSession({
         signed: false,
@@ -17,7 +16,7 @@ app.use(
 )
 
 app.use(currentUser);
-app.use(getUserPosts);
+app.use(getUserTimelineRouter);
 
 app.all('*', async (req, res) => {
     throw new NotFoundError();

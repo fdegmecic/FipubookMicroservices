@@ -11,7 +11,8 @@ export class UserFollowedListener extends Listener<UserFollowedEvent> {
         const {followerId, followingId} = data;
 
         const follower = Follower.build({
-             followerId, followingId
+            followerId: followerId,
+            followingId: followingId
         });
 
         await follower.save();

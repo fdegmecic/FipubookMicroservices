@@ -1,9 +1,10 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import useRequest from "../../hooks/use-request";
 import Router from 'next/router';
 import {Col, Container, Row} from "react-bootstrap";
 import Link from 'next/link';
 import Image from "next/image";
+import SignUp from "./signup";
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
@@ -23,6 +24,13 @@ const SignIn = () => {
         await doRequest();
     };
 
+ /*   useEffect(()=> {
+        const router = useRouter();
+        if(currentUser) {
+            return router.push('/')
+        }
+    }, [])
+*/
     return (
         <div className="container">
             <form onSubmit={onSubmit}>
@@ -69,5 +77,13 @@ const SignIn = () => {
         </div>
     );
 }
+
+/*SignIn.getInitialProps= async(client)=> {
+    const {data} = await client.get('/api/users/currentuser');
+
+    return {
+        data.currentUser
+    }
+}*/
 
 export default SignIn;

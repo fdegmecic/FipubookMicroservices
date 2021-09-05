@@ -1,16 +1,19 @@
 import Image from "next/image";
-import {ChatAltIcon, ThumbUpIcon} from "@heroicons/react/solid";
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {ChatAltIcon, ThumbUpIcon, PencilAltIcon} from "@heroicons/react/solid";
+import {useCallback, useEffect, useRef, useState} from "react";
 import Router from "next/router";
 import useRequestNoErrors from "../hooks/use-request-no-errors";
 import CommentSection from "./CommentSection";
-import axios from "axios";
 
 function Post({created, postId, postText, postLikes, postUrl, userId, userName, userAvatar, currentUser}) {
     const [likedStatus, setLikedStatus] = useState(false);
     const [commentsSize, setCommentsSize] = useState(0);
     const [postLikesSize, setPostLikesSize] = useState(postLikes?.length);
     const [commentSectionShow, setCommentSectionShow] = useState(false)
+    const [showUpdateInputBar, setShowUpdateInput] = useState(false);
+    const [updateText, setUpdateText] = useState('');
+    const inputRef = useRef(null);
+    const [postTextFromUpdate, setPostTextFromUpdate] = useState(postText);
 
     const likePost = async () => {
         const {doRequest} = useRequestNoErrors({
@@ -32,12 +35,37 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
         await doRequest();
     }
 
+    const updatePost = async (e) => {
+        e.preventDefault();
+
+        if (!inputRef.current.value) {
+            return;
+        }
+
+        const {doRequest} = useRequestNoErrors({
+            url: `/api/posts/${postId}`,
+            method: 'patch',
+            body: {
+                updateText,
+            },
+            onSuccess: (post) => setPostTextFromUpdate(post.postText)
+        })
+
+        inputRef.current.value = "";
+        await doRequest();
+        setShowUpdateInput(!showUpdateInputBar)
+    }
+
     const goToUserProfile = () => {
         Router.push(`/user/${userId}`);
     }
 
     const showCommentSection = () => {
         setCommentSectionShow(!commentSectionShow)
+    }
+
+    const showUpdateInput = () => {
+        setShowUpdateInput(!showUpdateInputBar)
     }
 
     const maybePluralize = (count, noun, suffix = 's') => {
@@ -47,13 +75,11 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
         return `${count} ${noun}${count !== 1 ? suffix : ''}`;
     }
 
-    const callBack = useCallback((commentsSizeCallback) => {
-        setCommentsSize(commentsSizeCallback)
+    const callBack = useCallback((commentCallback) => {
+        setCommentsSize(commentCallback)
     }, [commentsSize])
 
     useEffect(async () => {
-        const {data: commentsData} = await axios.get(`/api/comments/${postId}`)
-        setCommentsSize(commentsData.length)
         postLikes.map(postLike => {
             if (postLike.userId === currentUser?.id) {
                 setLikedStatus(true)
@@ -63,8 +89,8 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
 
     return (
         <div className="flex flex-col">
-            <div className="p-5 bg-white mt-2 rounded-t-2xl shadow-sm border border-2">
-                <div className="flex items-center space-x-2">
+            <div className="p-5 bg-white mt-2 rounded-t-2xl shadow-sm border border-2 items-center">
+                <div className="flex space-x-2">
                     <Image
                         onClick={goToUserProfile}
                         className="rounded-full cursor-pointer"
@@ -87,8 +113,30 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
                         )}
                     </div>
                 </div>
-
-                <p className="pt-4">{postText}</p>
+                <div className="flex flex-row justify-content-between">
+                    {showUpdateInputBar ?
+                        <div>
+                            <form className="flex flex-1">
+                                <input
+                                    className="rounded-full h-12 bg-gray-100
+                                                flex-grow px-5 focus:outline-none"
+                                    type="text"
+                                    ref={inputRef}
+                                    onChange={(e) => setUpdateText(e.target.value)}/>
+                                <button hidden type="submit" onClick={updatePost}>
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
+                        :
+                        <p className="pt-4">{postTextFromUpdate}</p>}
+                    {userId === currentUser.id &&
+                    <div className="filter hover:brightness-110
+                    transition duration-150 transform hover:scale-105 cursor-pointer"
+                         onClick={showUpdateInput}>
+                        <PencilAltIcon className="h-7"/>
+                    </div>}
+                </div>
             </div>
 
             {postUrl && (
@@ -156,7 +204,6 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
                 commentSectionShow={commentSectionShow}
                 currentUser={currentUser}
                 postId={postId}
-                userId={userId}
                 callBack={callBack}
             />
         </div>

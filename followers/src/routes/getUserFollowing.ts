@@ -5,8 +5,8 @@ import {Follower} from "../models/follower";
 
 const router = express.Router();
 
-router.get('/api/followers/following', requireAuth, async (req: Request, res: Response) => {
-    const user = await User.findById(req.currentUser!.id);
+router.get('/api/followers/following/:id', requireAuth, async (req: Request, res: Response) => {
+    const user = await User.findById(req.params.id);
 
     if(!user) {
         throw new NotFoundError();

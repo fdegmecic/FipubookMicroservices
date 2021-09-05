@@ -28,19 +28,20 @@ function UserInformation({currentUser, user}) {
     }
 
     useEffect(async () => {
-
         const {data} = await axios.get('/api/followers')
 
         data.map(follower => {
             if (follower.followingId === user.id) {
                 setFollowedStatus(true)
+            } else  {
+                setFollowedStatus(false)
             }
         })
         setHideFollow(true)
         if (currentUser.id === user.id) {
             setHideFollow(false)
         }
-    }, [followedStatus, user])
+    }, [user])
 
     return (
         <div className="bg-white p-2 rounded-2xl shadow-md

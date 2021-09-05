@@ -33,9 +33,8 @@ const followerSchema = new mongoose.Schema<FollowerDocument>({
     }
 })
 
-
 followerSchema.statics.build = (attributes: FollowerAttributes) => {
-    return new Follower({attributes});
+    return new Follower(attributes);
 }
 
 const Follower = mongoose.model<FollowerDocument, FollowerModel>('Follower', followerSchema);

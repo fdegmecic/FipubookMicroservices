@@ -11,7 +11,7 @@ router.patch('/api/posts/:id', requireAuth, [
     body('updateText')
         .not()
         .isEmpty()
-        .withMessage('Post text is required')
+        .withMessage('Update text is required')
 ], validateRequest, async (req: Request, res: Response) => {
     const post = await Post.findById(req.params.id);
 

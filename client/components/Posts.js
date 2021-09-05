@@ -10,18 +10,17 @@ function Posts({currentUser, posts}) {
     return (
         <div>
             {posts.map(post => (
-                    <Post created={post.created}
-                          key={post.id}
-                          postId={post.id}
-                          postText={post.postText}
-                          postUrl={post.postUrl}
-                          postLikes={getLikesForPost(post.postLikes, post.id)}
-                          userId={post.userId}
-                          userName={post.userName}
-                          userAvatar={post.userAvatar}
-                          currentUser={currentUser}
-                    />))}
-
+                <Post created={post.created}
+                      key={post.id}
+                      postId={post.id}
+                      postText={post.postText}
+                      postUrl={post.postImage}
+                      postLikes={getLikesForPost(post.postLikes, post.id)}
+                      userId={post.userId}
+                      userName={post.userName}
+                      userAvatar={post.userAvatar}
+                      currentUser={currentUser}
+                />))}
         </div>
     );
 }

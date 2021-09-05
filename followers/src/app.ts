@@ -7,7 +7,6 @@ import {errorHandler, NotFoundError, currentUser} from '@fdfipubook/common';
 import {getUserFollowersRouter} from "./routes/getUserFollowers";
 import {followUserRouter} from "./routes/followUser";
 import {getUserFollowingRouter} from "./routes/getUserFollowing";
-import {checkUserFollowingRouter} from "./routes/checkFollowingStatus";
 import {unfollowUserRouter} from "./routes/unfollowUser";
 
 const app = express();
@@ -25,7 +24,6 @@ app.use(currentUser);
 app.use(followUserRouter);
 app.use(getUserFollowersRouter);
 app.use(getUserFollowingRouter);
-app.use(checkUserFollowingRouter);
 app.use(unfollowUserRouter);
 
 app.all('*', async (req, res) => {

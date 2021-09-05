@@ -79,6 +79,7 @@ postSchema.statics.build = (attributes: PostAttributes) => {
         userId: attributes.userId,
         userName: attributes.userName,
         userAvatar: attributes.userAvatar,
+        created: attributes.created,
         version: attributes.version,
     });
 }

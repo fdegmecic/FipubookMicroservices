@@ -1,17 +1,12 @@
 import buildClient from "../api/build-client";
+import 'bootstrap/dist/css/bootstrap.css'
 import '../styles/globals.css'
-import SignIn from "./auth/signin";
 import Header from "../components/Header";
 
 const AppComponent = ({Component, pageProps, currentUser}) => {
     return <div className="h-screen bg-gray-100 overflow-hidden">
         <Header currentUser={currentUser}/>
-        {currentUser &&
-            <Component currentUser={currentUser} {...pageProps}/>
-        }
-        {!currentUser &&
-        <SignIn/>
-        }
+        <Component currentUser={currentUser} {...pageProps}/>
     </div>
 };
 
