@@ -16,5 +16,5 @@ Technologies used: React(Next.js), Node.js(Express), Kubernetes, Skaffold, Docke
 
 ![Fipubook-Architecture drawio](https://user-images.githubusercontent.com/42947589/132140228-6804e171-1b90-4c05-8867-708241bffdf1.png)
 
-#Database:
+# Database:
 ![Fipubook-Database drawio](https://user-images.githubusercontent.com/42947589/132140232-04f8aa7e-338b-4449-8573-ac6504437241.png)
