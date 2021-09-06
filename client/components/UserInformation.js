@@ -30,13 +30,13 @@ function UserInformation({currentUser, user}) {
     useEffect(async () => {
         const {data} = await axios.get('/api/followers')
 
+        setFollowedStatus(false)
         data.map(follower => {
             if (follower.followingId === user.id) {
                 setFollowedStatus(true)
-            } else  {
-                setFollowedStatus(false)
             }
         })
+
         setHideFollow(true)
         if (currentUser.id === user.id) {
             setHideFollow(false)

@@ -165,7 +165,8 @@ function Post({created, postId, postText, postLikes, postUrl, userId, userName, 
                         </div>
                     ))}
                     {(commentsSize !== 0 ?
-                            (<div className="justify-end inputIcon rounded-none rounded-br-2xl text-blue-500">
+                            (<div onClick={showCommentSection}
+                                className="justify-end inputIcon rounded-none rounded-br-2xl text-blue-500">
                                 <ChatAltIcon className="h-4"/>
                                 <p className="text-xs sm:text-base">{`${maybePluralize(commentsSize, "comment")}`}</p>
                             </div>)

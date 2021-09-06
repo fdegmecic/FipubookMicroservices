@@ -15,7 +15,6 @@ interface UserModel extends mongoose.Model<UserDocument> {
     build(attributes: UserAttributes): UserDocument;
 }
 
-
 const userSchema = new mongoose.Schema<UserDocument>({
     name: {
         type: String,
@@ -34,7 +33,6 @@ const userSchema = new mongoose.Schema<UserDocument>({
         }
     }
 })
-
 
 userSchema.statics.build = (attributes: UserAttributes) => {
     return new User({
