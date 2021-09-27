@@ -15,10 +15,7 @@ Sve veći broj organizacija prisvaja mikroservisnu arhitekturu kao odabrani nač
 ### Opis arhitekture:
 Technologies used: React(Next.js), Node.js(Express), Kubernetes, Skaffold, Docker, Google Kubernetes Engine, MongoDb, NATS streaming(events)
 
-Web aplikacija: [Live app: (Digital Ocean host)](http://www.fipubook-microservices-prod.com/)
-
 Dokumentacija: [priložena dokumentacija diplomskog rada](https://github.com/fdegmecic/FipubookMicroservices/files/7154374/FilipDegmecicDiplomskiRad.pdf)
-
 
 ![Fipubook-Architecture drawio](https://user-images.githubusercontent.com/42947589/132140228-6804e171-1b90-4c05-8867-708241bffdf1.png)
 
